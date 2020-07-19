@@ -19,7 +19,9 @@ class HealthTrackService
             $plots = [];
             foreach (
                 Measurement::where('type_id', $type->id)
-                    ->select(['value', 'ts'])->get()
+                    ->select(['value', 'ts'])
+                    ->orderBy('ts')
+                    ->get()
                 as $measure
             ) {
                 $date = (new Carbon($measure->ts))->toDateString();
