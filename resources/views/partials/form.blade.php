@@ -17,6 +17,6 @@
                 />
             </div>
         @endforeach
-        <input type="submit" value="Save" class="btn btn-primary float-right"/>
+        <input type="submit" value="Save" id="submit_{{ $formId }}" class="btn btn-primary float-right"/>
     </form>
 </div>

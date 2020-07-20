@@ -27,6 +27,7 @@ function loadGraph(id) {
 }
 
 function submitThisForm(form, target) {
+    $('#submit_' + $(form).attr('id')).hide(255);
     $.ajax({
         url: '/save',
         type: "POST",
