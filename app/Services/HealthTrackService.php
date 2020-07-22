@@ -34,7 +34,7 @@ class HealthTrackService
         }
 
 
-        return $this->makeGraphObject($data);
+        return $this->makeGraphObject($data, $this->getAnnotations($typeParams));
     }
 
     private function compilePlots(MeasurementType $type, array $plots)
@@ -62,16 +62,79 @@ class HealthTrackService
     }
 
 
-    private function makeGraphObject($data)
+    private function makeGraphObject($data, $annotations = [])
     {
         list($labels, $datasets) = $this->collectGraphVars($data);
+
         return [
             'type' => 'line',
             'data' => [
                 'labels' => $labels,
                 'datasets' => $datasets
+            ],
+            'options' => [
+                'scales' => [
+                    'yAxis' => [
+                        [
+                            'ticks' => [
+                                'beginAtZero' => true
+                            ]
+                        ]
+                    ]
+
+                ],
+                'annotation' => [
+                    'annotations' => $annotations
+                ]
             ]
         ];
+    }
+
+    /**
+     * @param $typeParamsoptions : { //your chart options
+     * annotation: {
+     * annotations: [{
+     * type: 'box',
+     * drawTime: 'beforeDatasetsDraw',
+     * yScaleID: 'y-axis-0',
+     * yMin: 40,
+     * yMax: 50,
+     * backgroundColor: 'rgba(0, 255, 0, 0.1)'
+     * }]
+     * }
+     * }
+     */
+
+    /**
+     * @param array $typeParams
+     * @return array
+     */
+    private function getAnnotations(array $typeParams)
+    {
+        $annotations = [];
+        if (in_array('sys', $typeParams)) {
+            $annotations[] =
+                [
+                    'type' => 'box',
+                    'drawTime' => 'beforeDatasetsDraw',
+                    'yScaleID' => 'y-axis-0',
+                    'yMin' => 110,
+                    'yMax' => 135,
+                    'backgroundColor' => 'rgba(0, 255, 0, 0.1)'
+                ];
+        }
+        if (in_array('dia', $typeParams)) {
+            $annotations[] =
+                [
+                    'type' => 'box',
+                    'drawTime' => 'beforeDatasetsDraw',
+                    'yScaleID' => 'y-axis-0',
+                    'yMin' => 85,
+                    'yMax' => 65,
+                    'backgroundColor' => 'rgba(0, 255, 0, 0.1)'
+                ];
+        }
+        return $annotations;
     }
 
     private function collectGraphVars($data)
